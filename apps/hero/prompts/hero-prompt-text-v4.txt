@@ -1,0 +1,140 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+
+NEW FEATURE:
+
+Add a “Gradient background” checkbox, unchecked by default.
+
+When unchecked, retain solid backgrounds and the Background colour target.
+
+When checked, replace Background with Start colour and End colour targets using the existing palette. Show a Direction dropdown with four choices: Left to right (to right, default), Right to left (to left), Top to bottom (to bottom), and Bottom to top (to top).
+
+On first enabling the gradient, use the current solid colour as its start colour and blue-500 as its end colour. Preserve both gradient colours and direction when switching it off and back on.
+
+Keep H1/H2 colour selection working. Ensure the active palette target is always visible and enabled. If switching modes hides the active target, select Start colour in gradient mode or Background in solid mode. Use the same fallback when hiding an active H2 target.
+
+Apply CSS linear-gradient() using Tailwind colour variables in the shared colour stylesheet in the head. Include it in exported HTML and do not use inline styles.
+
+Switching back to solid mode must set background-image to none and restore the saved solid colour.
+
+The Dark appearance preset should reset the saved solid background and heading colours, while preserving gradient colours, direction and whether gradient mode is enabled.
+
+Update immediately and preserve all existing features.
+
+CURRENT CODE:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <title>My Hero Page</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+
+    @layer theme, base, components, utilities;
+    @import "tailwindcss/theme.css" layer(theme) theme(static);
+    @import "tailwindcss/preflight.css" layer(base);
+    @import "tailwindcss/utilities.css" layer(utilities);
+
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl md:text-2xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero-h1-serif h1 {
+      @apply font-serif;
+    }
+
+    .hero-h2-serif h2 {
+      @apply font-serif;
+    }
+
+    .hero h1[hidden],
+    .hero h2[hidden] {
+      display: none !important;
+    }
+  </style>
+
+  <style>
+
+    .hero h1 {
+      letter-spacing: 0.005em;
+    }
+
+    .hero h2 {
+      letter-spacing: 0.03em;
+    }
+  </style>
+
+  <style>
+html .hero { background-color: var(--color-slate-900); }
+html .hero .hero-content h1 { color: var(--color-slate-50); }
+html .hero .hero-content h2 { color: var(--color-slate-300); }
+  </style>
+</head>
+<body>
+
+  <header class="hero hero-dark hero-centre hero-min-height">
+    <div class="hero-content">
+      <h1>Lorem ipsum dolor sit amet</h1>
+      <h2>Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+    </div>
+  </header>
+
+</body>
+</html>

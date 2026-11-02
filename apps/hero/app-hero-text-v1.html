@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <title>Hero Block Generator</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Shared hero styles: used by the preview and exported HTML -->
+  <style type="text/tailwindcss">
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl md:text-2xl;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero h1:focus,
+    .hero h2:focus {
+      outline: none;
+    }
+
+    .hero h1:focus-visible,
+    .hero h2:focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 6px;
+      border-radius: 3px;
+    }
+
+    .hero h1[hidden],
+    .hero h2[hidden] {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Editor-only interface styles -->
+  <style type="text/tailwindcss">
+    .app-page {
+      @apply min-h-screen bg-white text-slate-900;
+    }
+
+    .app-container {
+      @apply mx-auto max-w-6xl px-5 py-8 sm:px-8;
+    }
+
+    .app-title {
+      @apply text-2xl font-bold tracking-tight sm:text-3xl;
+    }
+
+    .app-description {
+      @apply mt-2 text-sm leading-relaxed text-slate-600;
+    }
+
+    .controls-panel {
+      @apply mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
+    }
+
+    .controls-heading {
+      @apply mb-3 text-sm font-semibold text-slate-800;
+    }
+
+    .controls-row {
+      @apply flex flex-wrap items-center gap-x-6 gap-y-4;
+    }
+
+    .control-label {
+      @apply inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700;
+    }
+
+    .control-checkbox {
+      @apply h-4 w-4 cursor-pointer accent-blue-600;
+    }
+
+    .control-label:focus-within {
+      @apply rounded-sm outline outline-2 outline-offset-4 outline-blue-500;
+    }
+
+    .instruction {
+      @apply mt-6 text-center text-sm text-slate-500;
+    }
+
+    .copy-button {
+      @apply fixed bottom-5 right-5 z-50 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-blue-700 active:bg-blue-800;
+    }
+
+    .copy-button:focus-visible {
+      @apply outline-2 outline-offset-4 outline-blue-500;
+    }
+
+    .status-message {
+      @apply mt-3 text-sm font-medium text-green-700;
+    }
+
+    .fallback-panel {
+      @apply mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4;
+    }
+
+    .fallback-label {
+      @apply mb-2 block text-sm font-semibold text-slate-800;
+    }
+
+    .fallback-textarea {
+      @apply min-h-48 w-full resize-y rounded-lg border border-slate-300 bg-white p-3 font-mono text-xs leading-relaxed text-slate-800 focus:outline-2 focus:outline-offset-2 focus:outline-blue-500;
+    }
+
+    .app-footer-space {
+      @apply h-24;
+    }
+  </style>
+</head>
+
+<body class="app-page">
+
+  <main class="app-container">
+
+    <section aria-labelledby="app-title">
+      <h1 id="app-title" class="app-title">
+        Hero Block Generator
+      </h1>
+
+      <p class="app-description">
+        Build a simple hero section and customise its appearance.
+        Edit the headings directly in the preview.
+      </p>
+    </section>
+
+    <!-- Settings panel -->
+    <section class="controls-panel" aria-labelledby="controls-heading">
+
+      <h2 id="controls-heading" class="controls-heading">
+        Hero settings
+      </h2>
+
+      <div class="controls-row">
+
+        <label class="control-label" for="dark-appearance">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="dark-appearance"
+          >
+          Dark appearance
+        </label>
+
+        <label class="control-label" for="centre-text">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="centre-text"
+          >
+          Centre text
+        </label>
+
+        <label class="control-label" for="minimum-height">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="minimum-height"
+            checked
+          >
+          Minimum height
+        </label>
+
+        <label class="control-label" for="show-subheading">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="show-subheading"
+            checked
+          >
+          Show subheading
+        </label>
+
+      </div>
+    </section>
+
+    <!-- Hero preview -->
+    <section aria-label="Hero preview">
+
+      <header
+        id="hero-preview"
+        class="hero hero-light hero-min-height"
+      >
+
+        <div class="hero-content">
+
+          <h1
+            id="hero-heading"
+            contenteditable="true"
+            spellcheck="false"
+            aria-label="Editable hero main heading"
+          >Lorem ipsum dolor sit amet</h1>
+
+          <h2
+            id="hero-subheading"
+            contenteditable="true"
+            spellcheck="false"
+            aria-label="Editable hero subheading"
+          >Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+
+        </div>
+
+      </header>
+
+      <p class="instruction">
+        Click a heading to edit the text.
+      </p>
+
+    </section>
+
+    <!-- Fallback for manual HTML copying -->
+    <section
+      id="fallback-panel"
+      class="fallback-panel"
+      aria-labelledby="fallback-label"
+      hidden
+    >
+      <label
+        id="fallback-label"
+        class="fallback-label"
+        for="fallback-html"
+      >
+        Copy your HTML manually
+      </label>
+
+      <textarea
+        id="fallback-html"
+        class="fallback-textarea"
+        readonly
+        spellcheck="false"
+        aria-describedby="fallback-help"
+      ></textarea>
+
+      <p id="fallback-help" class="mt-2 text-xs text-slate-600">
+        Select the HTML above and copy it into your own .html file.
+        This content updates automatically when you make changes.
+      </p>
+    </section>
+
+    <p
+      id="copy-status"
+      class="status-message"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+    <!-- Space so content can scroll clear of the fixed button -->
+    <div class="app-footer-space" aria-hidden="true"></div>
+
+  </main>
+
+  <!-- Fixed copy button -->
+  <button
+    id="copy-button"
+    class="copy-button"
+    type="button"
+  >
+    Copy HTML
+  </button>
+
+  <script>
+    // --------------------------------------------------
+    // 1. Get references to the page elements
+    // --------------------------------------------------
+
+    const heroPreview = document.getElementById("hero-preview");
+
+    const heroHeading = document.getElementById("hero-heading");
+
+    const heroSubheading = document.getElementById("hero-subheading");
+
+    const darkAppearanceCheckbox =
+      document.getElementById("dark-appearance");
+
+    const centreTextCheckbox =
+      document.getElementById("centre-text");
+
+    const minimumHeightCheckbox =
+      document.getElementById("minimum-height");
+
+    const showSubheadingCheckbox =
+      document.getElementById("show-subheading");
+
+    const copyButton = document.getElementById("copy-button");
+
+    const copyStatus = document.getElementById("copy-status");
+
+    const fallbackPanel = document.getElementById("fallback-panel");
+
+    const fallbackTextarea = document.getElementById("fallback-html");
+
+
+    // --------------------------------------------------
+    // 2. Store the four checkbox settings
+    // --------------------------------------------------
+
+    const settings = {
+      darkAppearance: darkAppearanceCheckbox.checked,
+      centreText: centreTextCheckbox.checked,
+      minimumHeight: minimumHeightCheckbox.checked,
+      showSubheading: showSubheadingCheckbox.checked
+    };
+
+
+    // --------------------------------------------------
+    // 3. Update the hero preview
+    // --------------------------------------------------
+
+    function updateHeroPreview() {
+
+      // Update the appearance without replacing the headings.
+      heroPreview.classList.toggle(
+        "hero-dark",
+        settings.darkAppearance
+      );
+
+      heroPreview.classList.toggle(
+        "hero-light",
+        !settings.darkAppearance
+      );
+
+      // Update the text alignment.
+      heroPreview.classList.toggle(
+        "hero-centre",
+        settings.centreText
+      );
+
+      // Update the minimum height.
+      heroPreview.classList.toggle(
+        "hero-min-height",
+        settings.minimumHeight
+      );
+
+      // Hide or show the subheading.
+      // The hidden property also removes it from keyboard navigation.
+      heroSubheading.hidden = !settings.showSubheading;
+
+      // Keep the manual-copy textarea up to date.
+      updateFallbackHTML();
+    }
+
+
+    // --------------------------------------------------
+    // 4. Read checkbox values and update settings
+    // --------------------------------------------------
+
+    function updateSettings() {
+
+      // A checkbox's checked property returns true or false.
+      settings.darkAppearance = darkAppearanceCheckbox.checked;
+
+      settings.centreText = centreTextCheckbox.checked;
+
+      settings.minimumHeight = minimumHeightCheckbox.checked;
+
+      settings.showSubheading = showSubheadingCheckbox.checked;
+
+      updateHeroPreview();
+    }
+
+
+    // --------------------------------------------------
+    // 5. Escape text before placing it in HTML
+    // --------------------------------------------------
+
+    function escapeHTML(text) {
+
+      return text.replace(/[&<>"']/g, function(character) {
+
+        const replacements = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        };
+
+        return replacements[character];
+
+      });
+    }
+
+
+    // --------------------------------------------------
+    // 6. Keep editable content as plain text
+    // --------------------------------------------------
+
+    function handlePlainTextPaste(event) {
+
+      event.preventDefault();
+
+      const pastedText = event.clipboardData.getData("text/plain");
+
+      // Insert plain text instead of pasted HTML or formatting.
+      document.execCommand("insertText", false, pastedText);
+
+      updateFallbackHTML();
+    }
+
+
+    // --------------------------------------------------
+    // 7. Generate the shared hero CSS for export
+    // --------------------------------------------------
+
+    function getHeroCSS() {
+
+      return `
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl md:text-2xl;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+      `;
+    }
+
+
+    // --------------------------------------------------
+    // 8. Generate the complete standalone HTML document
+    // --------------------------------------------------
+
+    function generateHTML() {
+
+      // Read the latest heading text.
+      const headingText = escapeHTML(heroHeading.textContent);
+
+      const subheadingText = escapeHTML(heroSubheading.textContent);
+
+      // Build the hero class list from the current settings.
+      const heroClasses = [
+        "hero",
+        settings.darkAppearance ? "hero-dark" : "hero-light",
+        settings.centreText ? "hero-centre" : "",
+        settings.minimumHeight ? "hero-min-height" : ""
+      ].filter(Boolean).join(" ");
+
+      // Only include the h2 when the checkbox is checked.
+      const subheadingHTML = settings.showSubheading
+        ? `\n      <h2>${subheadingText}</h2>`
+        : "";
+
+      // Create a complete HTML document.
+      const exportedHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <title>My Hero Page</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\\/script>
+
+  <style type="text/tailwindcss">
+${getHeroCSS()}
+  </style>
+</head>
+<body>
+
+  <header class="${heroClasses}">
+    <div class="hero-content">
+      <h1>${headingText}</h1>${subheadingHTML}
+    </div>
+  </header>
+
+</body>
+</html>`;
+
+      return exportedHTML;
+    }
+
+
+    // --------------------------------------------------
+    // 9. Update the manual-copy textarea
+    // --------------------------------------------------
+
+    function updateFallbackHTML() {
+
+      fallbackTextarea.value = generateHTML();
+    }
+
+
+    // --------------------------------------------------
+    // 10. Copy the generated HTML
+    // --------------------------------------------------
+
+    async function copyHTML() {
+
+      // Always generate fresh HTML using the latest settings.
+      const generatedHTML = generateHTML();
+
+      // Clear the previous status.
+      copyStatus.textContent = "";
+
+      try {
+
+        // Check that the Clipboard API is available.
+        if (!navigator.clipboard || !navigator.clipboard.writeText) {
+          throw new Error("Clipboard API unavailable");
+        }
+
+        // Copy the complete HTML document.
+        await navigator.clipboard.writeText(generatedHTML);
+
+        // Only show success after copying succeeds.
+        copyStatus.textContent =
+          "HTML copied—paste it into VS Code.";
+
+        // Hide the manual-copy area after successful copying.
+        fallbackPanel.hidden = true;
+
+      } catch (error) {
+
+        // Provide a manual-copy alternative if copying fails.
+        fallbackTextarea.value = generatedHTML;
+
+        fallbackPanel.hidden = false;
+
+        copyStatus.textContent =
+          "Automatic copying is unavailable. Use the HTML box below to copy manually.";
+
+        // Bring the fallback instructions into view.
+        fallbackPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+
+      }
+    }
+
+
+    // --------------------------------------------------
+    // 11. Connect the checkboxes to the settings
+    // --------------------------------------------------
+
+    darkAppearanceCheckbox.addEventListener(
+      "change",
+      updateSettings
+    );
+
+    centreTextCheckbox.addEventListener(
+      "change",
+      updateSettings
+    );
+
+    minimumHeightCheckbox.addEventListener(
+      "change",
+      updateSettings
+    );
+
+    showSubheadingCheckbox.addEventListener(
+      "change",
+      updateSettings
+    );
+
+
+    // --------------------------------------------------
+    // 12. Connect heading editing to HTML generation
+    // --------------------------------------------------
+
+    heroHeading.addEventListener("input", updateFallbackHTML);
+
+    heroSubheading.addEventListener("input", updateFallbackHTML);
+
+    // Prevent formatted content from being pasted.
+    heroHeading.addEventListener("paste", handlePlainTextPaste);
+
+    heroSubheading.addEventListener("paste", handlePlainTextPaste);
+
+
+    // --------------------------------------------------
+    // 13. Connect the copy button
+    // --------------------------------------------------
+
+    copyButton.addEventListener("click", copyHTML);
+
+
+    // --------------------------------------------------
+    // 14. Initialise the preview when the page opens
+    // --------------------------------------------------
+
+    updateHeroPreview();
+
+  </script>
+
+</body>
+</html>

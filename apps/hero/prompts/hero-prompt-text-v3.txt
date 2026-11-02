@@ -1,0 +1,130 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+
+NEW FEATURE:
+
+Add a shared Tailwind colour palette for independently selecting the hero background, H1 colour and H2 colour.
+
+Provide Background, H1 and H2 target buttons, with Background selected initially. Clearly show the active target and its selected colour name.
+
+Display the Tailwind colour families in labelled rows and shades 50–950 in labelled columns. Include black and white separately. Give swatches accessible colour names, keyboard support, visible focus and a clear selected state. Allow the palette itself to scroll horizontally on narrow screens without widening the page.
+
+Clicking a swatch changes only the active target.
+
+Rename the existing checkbox “Dark appearance preset”. Changing it resets all three colours: light uses slate-50, slate-900 and slate-700; dark uses slate-900, slate-50 and slate-300 for background, H1 and H2 respectively. Subsequent palette choices override individual colours. Other controls must not reset custom colours.
+
+Disable the H2 target while H2 is hidden. If H2 was selected, select Background instead. Preserve its colour when restoring it.
+
+Store colour names in the settings object. Apply colours using Tailwind palette variables in a shared style element in the head, with rules that override the preset styles. Include these rules in exported HTML. Do not use inline styles.
+
+Use solid colours only. Do not add gradients or custom colour inputs.
+
+
+CURRENT CODE:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <title>My Hero Page</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>
+
+  <style type="text/tailwindcss">
+
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl md:text-2xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero-h1-serif h1 {
+      @apply font-serif;
+    }
+
+    .hero-h2-serif h2 {
+      @apply font-serif;
+    }
+
+    .hero h1[hidden],
+    .hero h2[hidden] {
+      display: none !important;
+    }
+      
+  </style>
+
+  <style>
+
+    .hero h1 {
+      letter-spacing: 0.005em;
+    }
+
+    .hero h2 {
+      letter-spacing: 0.03em;
+    }
+      
+  </style>
+</head>
+<body>
+
+  <header class="hero hero-dark hero-centre hero-min-height">
+    <div class="hero-content">
+      <h1>Lorem ipsum dolor sit amet</h1>
+      <h2>Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+    </div>
+  </header>
+
+</body>
+</html>

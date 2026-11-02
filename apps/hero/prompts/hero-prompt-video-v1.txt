@@ -1,0 +1,896 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+
+NEW FEATURE:
+
+INSTRUCTIONS
+
+Let's adapt our existing Image Hero Block Generator to create hero blocks with a decorative video background.
+
+The current working app file is app-hero-image-v1.html. Create the new app, named app-hero-video-v1.html.
+
+Use the current code supplied below as your starting point.
+
+Preserve existing working features except those explicitly replaced below. Extend the existing settings object and named functions where appropriate. Avoid unrelated redesigns or refactoring.
+
+VIDEO BACKGROUND
+
+Replace the existing image background layer with a decorative video background.
+
+Assume this folder structure:
+
+- The app file is saved directly in the hero folder.
+- The video and poster image are saved in outputs/assets/videos.
+- Generated HTML pages will be saved directly in outputs.
+
+The supplied assets are:
+
+- hero-video.mp4: an MP4 video encoded with H.264.
+- hero-poster.jpg: a JPEG poster image.
+
+Use these exact relative paths in the app preview:
+
+- Video: outputs/assets/videos/hero-video.mp4
+- Poster: outputs/assets/videos/hero-poster.jpg
+
+Use these exact relative paths in the exported page:
+
+- Video: assets/videos/hero-video.mp4
+- Poster: assets/videos/hero-poster.jpg
+
+Define the exported paths once in JavaScript:
+
+const exportedVideoPath = "assets/videos/hero-video.mp4";
+const exportedPosterPath = "assets/videos/hero-poster.jpg";
+
+Use these constants when generating the exported video markup, poster fallback styling and poster preload link.
+
+Remove references to the previous hero-image.jpg asset.
+
+Do not add file uploads, asset selectors or URL inputs.
+
+VIDEO MARKUP AND LAYOUT
+
+Use a video element with:
+
+- muted
+- loop
+- playsinline
+- preload="metadata"
+- The appropriate poster attribute.
+- A source element with the appropriate video path and type="video/mp4".
+
+Treat the video as decorative:
+
+- Use aria-hidden="true".
+- Prevent keyboard focus.
+- Do not include native video controls.
+- Do not add a pause/play button.
+- Prevent the video layer from intercepting pointer events.
+
+Make the video fill the entire hero:
+
+- Position it absolutely within the hero.
+- Set its width and height to 100%.
+- Use object-fit: cover.
+- Use object-position: center.
+- Allow cropping without stretching.
+
+Preserve the semantic header element, responsive minimum heights and existing content spacing.
+
+Keep the video element in place when settings change. Editing text or changing colours, opacity, alignment or typography must not recreate the video or restart playback.
+
+POSTER AND PRELOAD
+
+Replace the previous image preload with a poster-image preload.
+
+In the head of the app, include:
+
+<link rel="preload" as="image" href="outputs/assets/videos/hero-poster.jpg">
+
+In the head of the exported page, include:
+
+<link rel="preload" as="image" href="assets/videos/hero-poster.jpg">
+
+Within each page, the preload, video poster attribute and poster fallback must reference exactly the same image path.
+
+Keep a poster fallback beneath the video. It should fill the hero using cover sizing and centred positioning.
+
+Show the poster until the video is actually playing. If the video cannot load or autoplay is blocked, leave the poster visible.
+
+Do not preload the video through a link element.
+
+PLAYBACK AND REDUCED MOTION
+
+Attempt muted autoplay when the page opens, unless the visitor prefers reduced motion.
+
+Use a small named playback-initialisation function:
+
+- Check prefers-reduced-motion before requesting playback.
+- Set the video’s muted property to true.
+- Call play() only when reduced motion is not requested.
+- Handle a rejected play() promise without an uncaught error.
+- Reveal the video after playback begins.
+- Keep the poster visible if playback fails.
+
+To avoid playback starting before the reduced-motion check, omit the autoplay attribute and initiate playback through this function.
+
+When reduced motion is requested, display the poster without starting the video.
+
+Listen for changes to the reduced-motion preference:
+
+- If reduced motion becomes enabled, pause and hide the video, revealing the poster.
+- If reduced motion becomes disabled, attempt muted playback again.
+
+Do not repeatedly retry blocked autoplay.
+
+Use the same playback behaviour in the app preview and exported page. Keep playback logic separate from the generator's editing and settings functions.
+
+OVERLAY AND EXISTING FEATURES
+
+Preserve the existing tinted overlay above the video and below the heading content.
+
+Defaults:
+
+- Solid black overlay.
+- Opacity: 0.4.
+- Gradient overlay: off.
+- H1 and H2 text: white.
+
+Preserve:
+
+- Overlay opacity slider from 0.1 to 0.9, step 0.05.
+- Solid overlay colour selection.
+- Gradient overlay checkbox.
+- Independent gradient start and end colours.
+- All four gradient directions.
+- Saved colour, direction and opacity settings when switching modes.
+- Tailwind colour palette and its active-target behaviour.
+- Independent H1 and H2 colours.
+- Direct plain-text heading editing.
+- Optional H2 and its Show subheading checkbox.
+- Independent font-family choices.
+- Independent letter-spacing sliders.
+- Left or centre alignment.
+- Minimum-height checkbox and existing responsive heights.
+- Fixed text-shadow-lg/30 effect on both headings.
+- Accessible labels, keyboard operation and visible focus.
+
+Apply opacity only to the overlay. Do not fade the video or heading content.
+
+Disable H2 controls and its palette target while H2 is hidden. Preserve its text and settings when restored.
+
+If H2 was the active palette target when hidden, select Start colour in gradient mode or Overlay colour in solid mode.
+
+HTML AND CSS
+
+Keep all styling in style elements in the head.
+
+Use named classes, Tailwind @apply and ordinary CSS where appropriate. Do not use inline style attributes.
+
+Retain:
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+Place styles containing @apply in style elements with type="text/tailwindcss".
+
+Use clearly named classes for:
+
+- Poster fallback.
+- Video.
+- Overlay.
+- Heading content.
+
+Establish their stacking order explicitly:
+
+1. Poster fallback.
+2. Video.
+3. Tinted overlay.
+4. Heading content.
+
+Keep the hero styles shared between preview and export wherever possible. Handle their different asset paths explicitly.
+
+Preserve Tailwind palette variables and CSS linear-gradient() for overlay colours. Ensure all required styling is included in the exported page.
+
+COPY HTML
+
+Preserve the fixed Copy HTML button, accessible status message and manual-copy fallback.
+
+Export a complete standalone HTML document containing:
+
+- HTML5 doctype and lang="en".
+- Charset, responsive viewport and title.
+- The existing meta description:
+  “Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.”
+- The hosted Tailwind script.
+- The poster-image preload.
+- All required hero, poster, video, overlay and heading styles in the head.
+- The semantic hero markup with the current heading text and selected settings.
+- H2 only when Show subheading is checked.
+- The small playback script required for autoplay, poster fallback and reduced-motion behaviour.
+
+The playback script is an explicit exception to the previous rule excluding JavaScript from exported pages.
+
+Exclude:
+
+- Generator controls and settings-management code.
+- Editing attributes and editing outlines.
+- Editor-only CSS.
+- Copy HTML button and copying code.
+- Manual-copy interface.
+
+Use only assets/videos paths in the exported page. Do not include outputs/assets/videos paths or references to the old image asset.
+
+Continue escaping edited text correctly. Keep any visible manual-copy output up to date.
+
+Only display a copying-success message after copying succeeds.
+
+Ensure closing script tags inside JavaScript strings are escaped correctly so they do not prematurely end the generator's script.
+
+SCOPE
+
+Do not add playback buttons, native video controls, uploads, asset selectors, URL inputs or unrelated features.
+
+Preserve the existing interface layout wherever possible.
+
+DELIVERY
+
+Return the complete app-hero-video-v1.html code in one HTML code block, without omissions. Include all required JavaScript.
+
+After the code, briefly explain where to save:
+
+- App: hero/app-hero-video-v1.html
+- Video: hero/outputs/assets/videos/hero-video.mp4
+- Poster: hero/outputs/assets/videos/hero-poster.jpg
+- Generated page, for example: hero/outputs/hero-video.html
+
+Explain that generated pages must be saved directly in outputs for their relative asset paths to work.
+
+Include a short manual checklist covering:
+
+- Video and poster loading in both the app and exported page.
+- Matching poster preload, poster attribute and fallback paths.
+- Muted, looping playback when autoplay is permitted.
+- Poster fallback when playback is blocked or the video is unavailable.
+- Poster-only display when reduced motion is enabled.
+- Responsive cropping without stretching.
+- Solid and gradient overlays, all four directions and opacity.
+- Heading editing without restarting playback.
+- Existing text controls and H2 visibility.
+- Copy HTML, manual-copy fallback and the exported result.
+
+Clearly state whether the app has actually been browser-tested.
+
+
+CURRENT CODE:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <title>Hero Block Generator (Image Background)</title>
+
+  <link rel="preload" as="image" href="outputs/assets/img/hero-image.jpg">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- ===== Shared hero stylesheet (also exported) ===== -->
+  <style type="text/tailwindcss" id="hero-styles">
+    @layer theme, base, components, utilities;
+    @import "tailwindcss/theme.css" layer(theme) theme(static);
+    @import "tailwindcss/preflight.css" layer(base);
+    @import "tailwindcss/utilities.css" layer(utilities);
+
+    .hero {
+      @apply relative flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16 bg-cover bg-center bg-no-repeat overflow-hidden;
+    }
+
+    .hero-overlay {
+      @apply absolute inset-0 pointer-events-none z-0;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply relative z-10 w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-4xl text-4xl font-bold leading-tight tracking-tight text-shadow-lg/30 sm:text-5xl md:text-6xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed text-shadow-lg/30 sm:text-xl md:text-2xl font-sans;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero-h1-serif h1 {
+      @apply font-serif;
+    }
+
+    .hero-h2-serif h2 {
+      @apply font-serif;
+    }
+
+    .hero h1[hidden],
+    .hero h2[hidden] {
+      display: none !important;
+    }
+  </style>
+
+  <style id="hero-extra-styles">
+    .hero h1 {
+      letter-spacing: 0.005em;
+    }
+
+    .hero h2 {
+      letter-spacing: 0.03em;
+    }
+  </style>
+
+  <!-- Colour overrides: rewritten by applyColours(), also exported -->
+  <style id="hero-colour-styles"></style>
+
+  <!-- ===== Generator-only styles (not exported) ===== -->
+  <style id="swatch-styles"></style>
+  <style id="ui-styles">
+    .gen { font-family: system-ui, sans-serif; color: #0f172a; max-width: 960px; margin: 0 auto; padding: 16px; }
+    .gen * { box-sizing: border-box; }
+    .gen [hidden] { display: none !important; }
+    .dir-field { display: inline-grid; gap: 4px; font-size: .875rem; margin-bottom: 6px; }
+    .dir-field select { border: 1px solid #94a3b8; border-radius: 6px; padding: 6px 8px; font: inherit; background: #fff; color: #0f172a; }
+    .dir-field select:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+    .range-field { display: flex; align-items: center; gap: 12px; font-size: .875rem; margin-bottom: 12px; }
+    .range-field input[type="range"] { flex: 1; accent-color: #0f172a; cursor: pointer; }
+    .range-val { font-weight: 700; min-width: 32px; }
+    .gen h1.gen-title { font-size: 1.4rem; font-weight: 700; margin: 0 0 12px; }
+    .panel { min-width: 0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px; background: #fff; }
+    .panel h2 { font-size: 1rem; font-weight: 700; margin: 0 0 10px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 12px; }
+    .checks label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .checks input { width: 16px; height: 16px; }
+    .fields { display: grid; gap: 8px; margin-bottom: 12px; }
+    .fields label { display: grid; gap: 4px; font-size: .875rem; }
+    .fields input { border: 1px solid #94a3b8; border-radius: 6px; padding: 6px 8px; font: inherit; width: 100%; }
+    .targets { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+    .target-btn { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid #94a3b8; border-radius: 8px; background: #fff; color: #0f172a; font: inherit; cursor: pointer; text-align: left; }
+    .target-btn[aria-pressed="true"] { border-color: #0f172a; background: #0f172a; color: #fff; }
+    .target-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .target-btn .chip { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #fff; box-shadow: 0 0 0 1px #64748b; flex: none; }
+    .target-btn .tl { font-weight: 600; }
+    .target-btn .tc { font-size: .8rem; opacity: .85; }
+    .target-btn:focus-visible, .copy-btn:focus-visible, .gen input:focus-visible, .gen textarea:focus-visible, .palette-scroll:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+    .status { margin: 4px 0 10px; font-size: .95rem; }
+    .status code { font-weight: 700; background: #e2e8f0; padding: 1px 6px; border-radius: 4px; }
+    .palette-scroll { overflow-x: auto; max-width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; }
+    .palette { border-collapse: separate; border-spacing: 3px; min-width: 640px; font-size: .75rem; }
+    .palette th { font-weight: 600; color: #334155; text-align: center; padding: 2px; }
+    .palette tbody th { text-align: left; position: sticky; left: 0; background: #fff; z-index: 1; padding-right: 8px; white-space: nowrap; }
+    .palette thead th:first-child { position: sticky; left: 0; background: #fff; z-index: 1; }
+    .swatch { display: block; width: 36px; height: 28px; border-radius: 4px; border: 1px solid rgba(15,23,42,.35); padding: 0; cursor: pointer; position: relative; }
+    .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #fff, 0 0 0 5px #0f172a; z-index: 2; }
+    .swatch[aria-pressed="true"]::after { content: ""; position: absolute; inset: 0; margin: auto; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid #0f172a; }
+    .swatch:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; z-index: 3; }
+    .copy-btn { border: 2px solid #0f172a; background: #0f172a; color: #fff; border-radius: 8px; padding: 6px 14px; font: inherit; cursor: pointer; margin-bottom: 8px; }
+    .gen textarea { width: 100%; min-height: 160px; font: .8rem/1.4 ui-monospace, monospace; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px; }
+    .preview { border: 1px dashed #94a3b8; border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+<div class="gen">
+  <h1 class="gen-title">Hero Block Generator (Image Background)</h1>
+
+  <section class="panel" aria-labelledby="controls-h">
+    <h2 id="controls-h">Settings</h2>
+
+    <div class="checks">
+      <label><input type="checkbox" id="opt-centre" checked> Centre align</label>
+      <label><input type="checkbox" id="opt-minheight" checked> Minimum height</label>
+      <label><input type="checkbox" id="opt-h1serif"> H1 serif font</label>
+      <label><input type="checkbox" id="opt-h2serif"> H2 serif font</label>
+      <label><input type="checkbox" id="opt-showh2" checked> Show subheading</label>
+      <label><input type="checkbox" id="opt-gradient"> Gradient overlay</label>
+    </div>
+
+    <div class="fields">
+      <label>H1 text <input type="text" id="txt-h1"></label>
+      <label>H2 text <input type="text" id="txt-h2"></label>
+    </div>
+
+    <div class="range-field">
+      <label for="opt-opacity">Overlay opacity</label>
+      <input type="range" id="opt-opacity" min="0.1" max="0.9" step="0.05" value="0.4">
+      <span class="range-val" id="opacity-val">0.4</span>
+    </div>
+
+    <h2 id="colour-h">Colours</h2>
+    <label class="dir-field" id="dir-field" hidden>Direction
+      <select id="opt-direction">
+        <option value="to right" selected>Left to right</option>
+        <option value="to left">Right to left</option>
+        <option value="to bottom">Top to bottom</option>
+        <option value="to top">Bottom to top</option>
+      </select>
+    </label>
+    <div class="targets" role="group" aria-labelledby="colour-h" id="targets">
+      <button type="button" class="target-btn" data-target="overlay" aria-pressed="true"></button>
+      <button type="button" class="target-btn" data-target="start" aria-pressed="false" hidden></button>
+      <button type="button" class="target-btn" data-target="end" aria-pressed="false" hidden></button>
+      <button type="button" class="target-btn" data-target="h1" aria-pressed="false"></button>
+      <button type="button" class="target-btn" data-target="h2" aria-pressed="false"></button>
+    </div>
+    <p class="status" id="colour-status" aria-live="polite"></p>
+
+    <div class="palette-scroll" role="region" aria-label="Tailwind colour palette (scrolls horizontally)" tabindex="0">
+      <table class="palette" id="palette"></table>
+    </div>
+  </section>
+
+  <div class="preview">
+    <header id="hero" class="hero" style="background-image: url('outputs/assets/img/hero-image.jpg');">
+      <div id="hero-overlay" class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1 id="hero-h1"></h1>
+        <h2 id="hero-h2"></h2>
+      </div>
+    </header>
+  </div>
+
+  <section class="panel" aria-labelledby="export-h">
+    <h2 id="export-h">Export</h2>
+    <button type="button" class="copy-btn" id="copy-btn">Copy HTML</button>
+    <p class="status" id="copy-status" aria-live="polite"></p>
+    <textarea id="export-out" readonly aria-label="Exported HTML"></textarea>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var exportedImagePath = "assets/img/hero-image.jpg";
+
+  var settings = {
+    centre: true,
+    minHeight: true,
+    h1Serif: false,
+    h2Serif: false,
+    h2Hidden: false,
+    h1Text: 'Lorem ipsum dolor sit amet',
+    h2Text: 'Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.',
+    opacity: 0.4,
+    colours: { overlay: 'black', h1: 'white', h2: 'white' },
+    colourTarget: 'overlay', // overlay | start | end | h1 | h2
+    gradient: {
+      enabled: false,
+      initialised: false,
+      start: 'black',
+      end: 'blue-500',
+      direction: 'to right'
+    }
+  };
+
+  var DIRECTIONS = ['to right', 'to left', 'to bottom', 'to top'];
+  var TARGET_LABELS = { overlay: 'Overlay colour', start: 'Start colour', end: 'End colour', h1: 'H1', h2: 'H2' };
+  var STATUS_LABELS = { overlay: 'Overlay colour', start: 'Start colour', end: 'End colour', h1: 'H1 colour', h2: 'H2 colour' };
+  var FAMILIES = ['slate','gray','zinc','neutral','stone','red','orange','amber','yellow','lime','green','emerald','teal','cyan','sky','blue','indigo','violet','purple','fuchsia','pink','rose'];
+  var SHADES = [50,100,200,300,400,500,600,700,800,900,950];
+
+  var heroEl = document.getElementById('hero');
+  var heroH1 = document.getElementById('hero-h1');
+  var heroH2 = document.getElementById('hero-h2');
+
+  /* ---------- Hero ---------- */
+  function heroClassName() {
+    var c = ['hero'];
+    if (settings.centre) c.push('hero-centre');
+    if (settings.minHeight) c.push('hero-min-height');
+    if (settings.h1Serif) c.push('hero-h1-serif');
+    if (settings.h2Serif) c.push('hero-h2-serif');
+    return c.join(' ');
+  }
+
+  function applyHero() {
+    heroEl.className = heroClassName();
+    heroH1.textContent = settings.h1Text;
+    heroH2.textContent = settings.h2Text;
+    heroH2.hidden = settings.h2Hidden;
+  }
+
+  /* ---------- Colours & Styling ---------- */
+  function colourVar(name) { return 'var(--color-' + name + ')'; }
+
+  function getTargetColour(t) {
+    if (t === 'start') return settings.gradient.start;
+    if (t === 'end') return settings.gradient.end;
+    return settings.colours[t];
+  }
+
+  function setTargetColour(t, name) {
+    if (t === 'start') settings.gradient.start = name;
+    else if (t === 'end') settings.gradient.end = name;
+    else settings.colours[t] = name;
+  }
+
+  function isTargetVisible(t) {
+    if (t === 'overlay') return !settings.gradient.enabled;
+    if (t === 'start' || t === 'end') return settings.gradient.enabled;
+    return true;
+  }
+
+  function isTargetEnabled(t) {
+    return isTargetVisible(t) && !(t === 'h2' && settings.h2Hidden);
+  }
+
+  function ensureValidTarget() {
+    if (!isTargetEnabled(settings.colourTarget)) {
+      settings.colourTarget = settings.gradient.enabled ? 'start' : 'overlay';
+    }
+  }
+
+  function buildColourCss() {
+    var c = settings.colours, g = settings.gradient;
+    var dir = DIRECTIONS.indexOf(g.direction) >= 0 ? g.direction : 'to right';
+    var overlayBg = g.enabled
+      ? 'html .hero-overlay { background-color: ' + colourVar(g.start) + '; background-image: linear-gradient(' + dir + ', ' + colourVar(g.start) + ', ' + colourVar(g.end) + '); opacity: ' + settings.opacity + '; }'
+      : 'html .hero-overlay { background-color: ' + colourVar(c.overlay) + '; background-image: none; opacity: ' + settings.opacity + '; }';
+    return [
+      overlayBg,
+      'html .hero .hero-content h1 { color: ' + colourVar(c.h1) + '; }',
+      'html .hero .hero-content h2 { color: ' + colourVar(c.h2) + '; }'
+    ].join('\n');
+  }
+
+  function applyColours() {
+    document.getElementById('hero-colour-styles').textContent = buildColourCss();
+  }
+
+  function colourLabel(name) {
+    var m = /^([a-z]+)-(\d+)$/.exec(name);
+    var base = m ? m[1] + ' ' + m[2] : name;
+    return base.charAt(0).toUpperCase() + base.slice(1);
+  }
+
+  /* ---------- Palette ---------- */
+  var swatchGrid = [];
+  var allSwatches = [];
+
+  function buildSwatchCss(names) {
+    document.getElementById('swatch-styles').textContent = names.map(function (n) {
+      return '.sw-' + n + ' { background-color: var(--color-' + n + '); }';
+    }).join('\n');
+  }
+
+  function makeSwatch(name, row, col) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'swatch sw-' + name;
+    b.dataset.colour = name;
+    b.dataset.row = row;
+    b.dataset.col = col;
+    b.setAttribute('aria-label', colourLabel(name));
+    b.setAttribute('aria-pressed', 'false');
+    b.title = colourLabel(name);
+    b.tabIndex = -1;
+    allSwatches.push(b);
+    return b;
+  }
+
+  function renderPalette() {
+    var table = document.getElementById('palette');
+    var names = [];
+    var thead = document.createElement('thead');
+    var hr = document.createElement('tr');
+    var corner = document.createElement('th');
+    corner.scope = 'col';
+    corner.textContent = 'Colour';
+    hr.appendChild(corner);
+    SHADES.forEach(function (s) {
+      var th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = s;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+    var rowIndex = 0;
+
+    FAMILIES.forEach(function (fam) {
+      var tr = document.createElement('tr');
+      var th = document.createElement('th');
+      th.scope = 'row';
+      th.textContent = fam;
+      tr.appendChild(th);
+      var row = [];
+      SHADES.forEach(function (s, ci) {
+        var name = fam + '-' + s;
+        names.push(name);
+        var td = document.createElement('td');
+        var b = makeSwatch(name, rowIndex, ci);
+        td.appendChild(b);
+        tr.appendChild(td);
+        row.push(b);
+      });
+      swatchGrid.push(row);
+      tbody.appendChild(tr);
+      rowIndex++;
+    });
+
+    ['black', 'white'].forEach(function (name) {
+      names.push(name);
+      var tr = document.createElement('tr');
+      var th = document.createElement('th');
+      th.scope = 'row';
+      th.textContent = name;
+      tr.appendChild(th);
+      var td = document.createElement('td');
+      var b = makeSwatch(name, rowIndex, 0);
+      td.appendChild(b);
+      tr.appendChild(td);
+      for (var i = 1; i < SHADES.length; i++) tr.appendChild(document.createElement('td'));
+      swatchGrid.push([b]);
+      tbody.appendChild(tr);
+      rowIndex++;
+    });
+
+    table.appendChild(tbody);
+    buildSwatchCss(names);
+
+    table.addEventListener('click', function (e) {
+      var b = e.target.closest('.swatch');
+      if (b) setColour(b.dataset.colour);
+    });
+
+    table.addEventListener('focusin', function (e) {
+      var b = e.target.closest('.swatch');
+      if (!b) return;
+      allSwatches.forEach(function (s) { s.tabIndex = -1; });
+      b.tabIndex = 0;
+    });
+
+    table.addEventListener('keydown', function (e) {
+      var b = e.target.closest('.swatch');
+      if (!b) return;
+      var r = +b.dataset.row, c = +b.dataset.col, nr = r, nc = c;
+      switch (e.key) {
+        case 'ArrowRight': nc = c + 1; break;
+        case 'ArrowLeft':  nc = c - 1; break;
+        case 'ArrowDown':  nr = r + 1; break;
+        case 'ArrowUp':    nr = r - 1; break;
+        case 'Home':       nc = 0; break;
+        case 'End':        nc = Infinity; break;
+        default: return;
+      }
+      e.preventDefault();
+      if (nr < 0 || nr >= swatchGrid.length) return;
+      var row = swatchGrid[nr];
+      nc = Math.max(0, Math.min(nc, row.length - 1));
+      row[nc].focus();
+    });
+  }
+
+  function updatePalette() {
+    var selected = getTargetColour(settings.colourTarget);
+    allSwatches.forEach(function (b) {
+      var on = b.dataset.colour === selected;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+    });
+    if (!allSwatches.some(function (b) { return b.tabIndex === 0; })) allSwatches[0].tabIndex = 0;
+  }
+
+  /* ---------- Targets ---------- */
+  function renderTargets() {
+    var buttons = document.querySelectorAll('#targets .target-btn');
+    Array.prototype.forEach.call(buttons, function (btn) {
+      var t = btn.dataset.target;
+      var name = getTargetColour(t);
+      var disabled = t === 'h2' && settings.h2Hidden;
+      btn.hidden = !isTargetVisible(t);
+      btn.disabled = disabled;
+      btn.setAttribute('aria-pressed', t === settings.colourTarget ? 'true' : 'false');
+      btn.innerHTML = '';
+      var chip = document.createElement('span');
+      chip.className = 'chip sw-' + name;
+      var tl = document.createElement('span');
+      tl.className = 'tl';
+      tl.textContent = TARGET_LABELS[t];
+      var tc = document.createElement('span');
+      tc.className = 'tc';
+      tc.textContent = disabled ? name + ' (H2 hidden)' : name;
+      btn.appendChild(chip); btn.appendChild(tl); btn.appendChild(tc);
+    });
+    var status = document.getElementById('colour-status');
+    status.innerHTML = '';
+    status.appendChild(document.createTextNode('Editing ' + STATUS_LABELS[settings.colourTarget] + ': '));
+    var code = document.createElement('code');
+    code.textContent = getTargetColour(settings.colourTarget);
+    status.appendChild(code);
+  }
+
+  function setColour(name) {
+    setTargetColour(settings.colourTarget, name);
+    refreshColourUi();
+  }
+
+  function setTarget(t) {
+    if (!isTargetEnabled(t)) return;
+    settings.colourTarget = t;
+    refreshColourUi();
+  }
+
+  function refreshColourUi() {
+    ensureValidTarget();
+    document.getElementById('dir-field').hidden = !settings.gradient.enabled;
+    applyColours();
+    renderTargets();
+    updatePalette();
+    updateExport();
+  }
+
+  /* ---------- Export ---------- */
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function buildExportHtml() {
+    var heroCss = document.getElementById('hero-styles').textContent.replace(/\s+$/, '');
+    var extraCss = document.getElementById('hero-extra-styles').textContent.replace(/\s+$/, '');
+    var colourCss = buildColourCss();
+    return [
+      '<!DOCTYPE html>',
+      '<html lang="en">',
+      '<head>',
+      '  <meta charset="UTF-8">',
+      '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+      '  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">',
+      '  <title>My Hero Page</title>',
+      '',
+      '  <link rel="preload" as="image" href="' + exportedImagePath + '">',
+      '  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>',
+      '',
+      '  <style type="text/tailwindcss">',
+      heroCss,
+      '  </style>',
+      '',
+      '  <style>',
+      extraCss,
+      '  </style>',
+      '',
+      '  <style>',
+      colourCss,
+      '  </style>',
+      '</head>',
+      '<body>',
+      '',
+      '  <header class="' + heroClassName() + '" style="background-image: url(\'' + exportedImagePath + '\');">',
+      '    <div class="hero-overlay" aria-hidden="true"></div>',
+      '    <div class="hero-content">',
+      '      <h1>' + esc(settings.h1Text) + '</h1>',
+      settings.h2Hidden ? '' : '      <h2>' + esc(settings.h2Text) + '</h2>',
+      '    </div>',
+      '  </header>',
+      '',
+      '</body>',
+      '</html>'
+    ].filter(function (line) { return line !== null; }).join('\n');
+  }
+
+  function updateExport() {
+    document.getElementById('export-out').value = buildExportHtml();
+  }
+
+  /* ---------- Wiring ---------- */
+  function onShowH2Change(show) {
+    settings.h2Hidden = !show;
+    ensureValidTarget();
+    applyHero();
+    refreshColourUi();
+  }
+
+  function onGradientChange(on) {
+    var g = settings.gradient;
+    if (on && !g.initialised) {
+      g.start = settings.colours.overlay; // current solid overlay colour
+      g.end = 'blue-500';
+      g.initialised = true;
+    }
+    g.enabled = on;
+    refreshColourUi();
+  }
+
+  function onDirectionChange(value) {
+    if (DIRECTIONS.indexOf(value) < 0) return;
+    settings.gradient.direction = value;
+    refreshColourUi();
+  }
+
+  function bindCheck(id, fn) {
+    document.getElementById(id).addEventListener('change', function (e) { fn(e.target.checked); });
+  }
+
+  bindCheck('opt-centre',    function (v) { settings.centre = v;    applyHero(); updateExport(); });
+  bindCheck('opt-minheight', function (v) { settings.minHeight = v; applyHero(); updateExport(); });
+  bindCheck('opt-h1serif',   function (v) { settings.h1Serif = v;   applyHero(); updateExport(); });
+  bindCheck('opt-h2serif',   function (v) { settings.h2Serif = v;   applyHero(); updateExport(); });
+  bindCheck('opt-showh2', onShowH2Change);
+  bindCheck('opt-gradient', onGradientChange);
+  
+  document.getElementById('opt-direction').addEventListener('change', function (e) {
+    onDirectionChange(e.target.value);
+  });
+
+  document.getElementById('opt-opacity').addEventListener('input', function (e) {
+    var val = parseFloat(e.target.value);
+    settings.opacity = val;
+    document.getElementById('opacity-val').textContent = val.toFixed(2);
+    applyColours();
+    updateExport();
+  });
+
+  document.getElementById('txt-h1').addEventListener('input', function (e) {
+    settings.h1Text = e.target.value; applyHero(); updateExport();
+  });
+  document.getElementById('txt-h2').addEventListener('input', function (e) {
+    settings.h2Text = e.target.value; applyHero(); updateExport();
+  });
+
+  document.getElementById('targets').addEventListener('click', function (e) {
+    var btn = e.target.closest('.target-btn');
+    if (btn) setTarget(btn.dataset.target);
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var out = document.getElementById('export-out');
+    var statusEl = document.getElementById('copy-status');
+    out.select();
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(out.value).then(function () {
+        statusEl.textContent = 'HTML copied to clipboard!';
+      }).catch(function () {
+        document.execCommand('copy');
+        statusEl.textContent = 'HTML copied to clipboard!';
+      });
+    } else {
+      document.execCommand('copy');
+      statusEl.textContent = 'HTML copied to clipboard!';
+    }
+  });
+
+  /* ---------- Init ---------- */
+  document.getElementById('txt-h1').value = settings.h1Text;
+  document.getElementById('txt-h2').value = settings.h2Text;
+  renderPalette();
+  applyHero();
+  refreshColourUi();
+})();
+</script>
+
+</body>
+</html>
