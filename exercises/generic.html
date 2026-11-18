@@ -1,863 +1,329 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-        Save this file in your project-folder:
-
-        project-folder/
-        ├── generic.html      ← this file
-        └── assets/
-            ├── img/          ← images:  src="assets/img/..."
-            └── videos/       ← videos:  src="assets/videos/..."
-
-        The sample images and videos in the generators load from lunevedy.com,
-        so they work wherever this file is saved. Paths to your own images and
-        videos start with assets/, so they only work when this file sits
-        directly inside your project-folder.
-    -->
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Marcelo Frota</title>
-
-    <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
-
-    <!-- Preload the hero image so it appears as soon as possible -->
-    <link rel="preload" as="image" href="https://lunevedy.com/v2/assets/img/hero-image.jpg">
-
-    <!-- Tailwind CSS (include once per page) -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!--
-        All the page's CSS goes in this one style element.
-        Paste each block type's CSS once, even if you use that block type several times.
-    -->
-    <style type="text/tailwindcss">
-
-        /* Paste CSS styles here */
-
-        /* ===== Hero ===== */
-
-        @layer components {
-
-            /* Layers, bottom to top:
-            1. image or poster   2. video   3. tinted overlay   4. headings */
-
-            .hero {
-                @apply relative isolate flex w-full items-center justify-center overflow-hidden px-6 py-16 md:px-12 md:py-20;
-            }
-
-            .hero-content {
-                @apply relative z-30 w-full max-w-5xl;
-            }
-
-            .hero-centre {
-                text-align: center;
-            }
-
-            .hero-centre .hero-content {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-min-height {
-                @apply min-h-[480px] md:min-h-[85vh];
-            }
-
-            .hero h1 {
-                @apply font-sans text-4xl font-normal leading-tight tracking-tight text-shadow-lg/30 md:text-6xl;
-                overflow-wrap: anywhere;
-                white-space: pre-wrap;
-            }
-
-            .hero h2 {
-                @apply mt-6 font-sans text-lg font-normal leading-relaxed text-shadow-lg/30 md:text-2xl;
-                overflow-wrap: anywhere;
-                white-space: pre-wrap;
-            }
-
-            /* Image background */
-            .hero-image {
-                @apply absolute inset-0 z-0 bg-cover bg-center bg-no-repeat;
-                background-image: url("https://lunevedy.com/v2/assets/img/hero-image.jpg");
-            }
-
-            /* Video background: the poster shows until the video plays */
-            .hero-poster {
-                @apply absolute inset-0 z-0 bg-cover bg-center bg-no-repeat;
-                background-image: url("https://lunevedy.com/v2/assets/videos/hero-poster.jpg");
-            }
-
-            .hero-video {
-                @apply pointer-events-none absolute inset-0 z-10 h-full w-full object-cover object-center opacity-0 transition-opacity duration-200 motion-reduce:transition-none;
-            }
-
-            .hero-video.is-playing {
-                @apply opacity-100;
-            }
-
-            /* Tinted overlay */
-            .hero-overlay {
-                @apply pointer-events-none absolute inset-0 z-20;
-            }
-
-            /* Badge: a short label above the H1. Its shape and colours
-            are classes in the HTML. */
-            .hero-badge {
-                @apply mb-6 inline-block px-3 py-1.5 text-sm font-normal;
-                overflow-wrap: anywhere;
-                white-space: pre-wrap;
-            }
-
-            /* Buttons: links styled as buttons */
-            .hero-buttons {
-                @apply mt-10 flex flex-wrap gap-4 md:gap-x-6;
-            }
-
-            .hero-centre .hero-buttons {
-                @apply justify-center;
-            }
-
-            .hero-button {
-                @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-7 py-3 text-base font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
-            }
-
-            .hero-button-secondary {
-                @apply bg-transparent;
-            }
-
-            /* Optional icon after the button text */
-            .hero-button-icon {
-                @apply size-5 shrink-0 transition-transform duration-200;
-            }
-
-            /* Arrows nudge in their direction on hover */
-            .hero-button:hover .hero-icon-nudge-right {
-                @apply motion-safe:translate-x-0.75;
-            }
-
-            .hero-button:hover .hero-icon-nudge-up-right {
-                @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
-            }
-
-            /* Text animations: the H2 and buttons start slightly after the H1. */
-
-            .hero-animate-from-bottom .hero-badge,
-            .hero-animate-from-bottom h1,
-            .hero-animate-from-bottom h2,
-            .hero-animate-from-bottom .hero-buttons {
-                animation: hero-from-bottom 0.8s ease-out both;
-            }
-
-            .hero-animate-from-left .hero-badge,
-            .hero-animate-from-left h1,
-            .hero-animate-from-left h2,
-            .hero-animate-from-left .hero-buttons {
-                animation: hero-from-left 0.8s ease-out both;
-            }
-
-            .hero-animate-from-right .hero-badge,
-            .hero-animate-from-right h1,
-            .hero-animate-from-right h2,
-            .hero-animate-from-right .hero-buttons {
-                animation: hero-from-right 0.8s ease-out both;
-            }
-
-            .hero-animate-fade .hero-badge,
-            .hero-animate-fade h1,
-            .hero-animate-fade h2,
-            .hero-animate-fade .hero-buttons {
-                animation: hero-fade 1s ease-out both;
-            }
-
-            .hero-animate-scale .hero-badge,
-            .hero-animate-scale h1,
-            .hero-animate-scale h2,
-            .hero-animate-scale .hero-buttons {
-                animation: hero-scale 0.8s ease-out both;
-            }
-
-            .hero[class*="hero-animate-"] h2 {
-                animation-delay: 0.15s;
-            }
-
-            .hero[class*="hero-animate-"] .hero-buttons {
-                animation-delay: 0.3s;
-            }
-
-            /* Respect visitors who prefer reduced motion */
-            @media (prefers-reduced-motion: reduce) {
-                .hero .hero-badge,
-                .hero h1,
-                .hero h2,
-                .hero .hero-buttons {
-                    animation: none !important;
-                }
-            }
-
-        }
-
-        @keyframes hero-from-bottom {
-            from { opacity: 0; transform: translateY(1.5rem); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        @keyframes hero-from-left {
-            from { opacity: 0; transform: translateX(-2rem); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        @keyframes hero-from-right {
-            from { opacity: 0; transform: translateX(2rem); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        @keyframes hero-fade {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        @keyframes hero-scale {
-            from { opacity: 0; transform: scale(0.92); }
-            to   { opacity: 1; transform: none; }
-        }
-        /* ===== One-column section ===== */
-
-    @layer components {
-
-        .one-col {
-            @apply w-full px-6 py-16 md:px-12 md:py-24;
-        }
-
-        /* Single column, at most 90ch wide (about 900px at 18px text)
-        from the md breakpoint. ch scales with the text size. */
-        .one-col-content {
-            @apply mx-auto w-full text-lg md:max-w-[90ch];
-        }
-
-        .one-col-centre {
-            @apply text-center;
-        }
-
-        .one-col h2 {
-            @apply text-3xl md:text-4xl font-normal leading-tight tracking-tight;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .one-col p {
-            @apply mt-5 leading-relaxed;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .one-col h2 + p {
-            @apply mt-3;
-        }
-
-        /* Image: fills the column and scales down */
-        .one-col-image {
-            @apply mt-6 block h-auto w-full;
-        }
-
-        .one-col-image + p {
-            @apply mt-6;
-        }
-
-        /* Whatever comes first starts at the top */
-        .one-col-content > :first-child {
-            @apply mt-0;
-        }
-
-        /* Link: underlined in both states; its colours are classes in the HTML.
-        Thickness and offset are in em, so they scale with the text. */
-        .one-col-link {
-            @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
-        }
-
-        .one-col-link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-            border-radius: 2px;
-        }
-
-    }
-
-    /* ===== Split section ===== */
-
-    @layer components {
-
-        .split {
-            @apply w-full px-6 py-16 md:px-12 md:py-24;
-        }
-
-        /* Two columns from lg (1024px): text and image side by side,
-        vertically centred. Below lg they stack, image first. */
-        .split-grid {
-            @apply mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16;
-        }
-
-        /* Text column. In the HTML the text comes first (logical reading
-        order); CSS order controls where the image appears. */
-        .split-text {
-            @apply w-full text-lg;
-        }
-
-        .split-media {
-            @apply order-first lg:order-none;
-        }
-
-        /* "Image on left": add split-reverse to the section */
-        .split-reverse .split-media {
-            @apply lg:order-first;
-        }
-
-        .split h2 {
-            @apply text-3xl md:text-4xl font-normal leading-tight tracking-tight;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split p {
-            @apply mt-5 leading-relaxed;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split h2 + p {
-            @apply mt-3;
-        }
-
-        /* Whatever comes first starts at the top */
-        .split-text > :first-child {
-            @apply mt-0;
-        }
-
-        /* Image: fills its column at its natural 4:3 shape */
-        .split-image {
-            @apply block h-auto w-full;
-        }
-
-        /* "Image fills column": add split-fill to the section. The image
-        runs edge to edge and is cropped to fit (object-cover); the text
-        keeps its padding. On phones the image sits on top at 4:3. */
-        .split-fill {
-            @apply p-0 md:p-0;
-        }
-
-        .split-fill .split-grid {
-            @apply max-w-none items-stretch gap-0 lg:min-h-[480px] lg:gap-0;
-        }
-
-        .split-fill .split-text {
-            @apply max-w-xl self-center justify-self-center px-6 py-16 md:px-12 md:py-20 lg:px-16;
-        }
-
-        .split-fill .split-media {
-            @apply relative aspect-[4/3] lg:aspect-auto;
-        }
-
-        .split-fill .split-image {
-            @apply absolute inset-0 h-full w-full object-cover;
-        }
-
-        /* Link: underlined in both states; its colours are classes in the HTML.
-        Thickness and offset are in em, so they scale with the text. */
-        .split-link {
-            @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
-        }
-
-        .split-link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-            border-radius: 2px;
-        }
-
-        /* Button: a link styled as a button; its shape and colours
-        are classes in the HTML. */
-        .split-buttons {
-            @apply mt-8 flex flex-wrap gap-4;
-        }
-
-        .split-button {
-            @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-7 py-3 text-base font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
-        }
-
-        /* Optional icon after the button text */
-        .split-button-icon {
-            @apply size-5 shrink-0 transition-transform duration-200;
-        }
-
-        /* Arrows nudge in their direction on hover */
-        .split-button:hover .split-icon-nudge-right {
-            @apply motion-safe:translate-x-0.75;
-        }
-
-        .split-button:hover .split-icon-nudge-up-right {
-            @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
-        }
-
-    }
-    /* ===== Split section ===== */
-
-    @layer components {
-
-        .split {
-            @apply w-full px-6 py-16 md:px-12 md:py-24;
-        }
-
-        /* Two columns from lg (1024px): text and image side by side,
-        vertically centred. Below lg they stack, image first. */
-        .split-grid {
-            @apply mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16;
-        }
-
-        /* Text column. In the HTML the text comes first (logical reading
-        order); CSS order controls where the image appears. */
-        .split-text {
-            @apply w-full text-lg;
-        }
-
-        .split-media {
-            @apply order-first lg:order-none;
-        }
-
-        /* "Image on left": add split-reverse to the section */
-        .split-reverse .split-media {
-            @apply lg:order-first;
-        }
-
-        .split h2 {
-            @apply text-3xl md:text-4xl font-normal leading-tight tracking-tight;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split p {
-            @apply mt-5 leading-relaxed;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split h2 + p {
-            @apply mt-3;
-        }
-
-        /* Whatever comes first starts at the top */
-        .split-text > :first-child {
-            @apply mt-0;
-        }
-
-        /* Image: fills its column at its natural 4:3 shape */
-        .split-image {
-            @apply block h-auto w-full;
-        }
-
-        /* "Image fills column": add split-fill to the section. The image
-        runs edge to edge and is cropped to fit (object-cover); the text
-        keeps its padding. On phones the image sits on top at 4:3. */
-        .split-fill {
-            @apply p-0 md:p-0;
-        }
-
-        .split-fill .split-grid {
-            @apply max-w-none items-stretch gap-0 lg:min-h-[480px] lg:gap-0;
-        }
-
-        .split-fill .split-text {
-            @apply max-w-xl self-center justify-self-center px-6 py-16 md:px-12 md:py-20 lg:px-16;
-        }
-
-        .split-fill .split-media {
-            @apply relative aspect-[4/3] lg:aspect-auto;
-        }
-
-        .split-fill .split-image {
-            @apply absolute inset-0 h-full w-full object-cover;
-        }
-
-        /* Link: underlined in both states; its colours are classes in the HTML.
-        Thickness and offset are in em, so they scale with the text. */
-        .split-link {
-            @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
-        }
-
-        .split-link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-            border-radius: 2px;
-        }
-
-        /* Button: a link styled as a button; its shape and colours
-        are classes in the HTML. */
-        .split-buttons {
-            @apply mt-8 flex flex-wrap gap-4;
-        }
-
-        .split-button {
-            @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-7 py-3 text-base font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
-        }
-
-        /* Optional icon after the button text */
-        .split-button-icon {
-            @apply size-5 shrink-0 transition-transform duration-200;
-        }
-
-        /* Arrows nudge in their direction on hover */
-        .split-button:hover .split-icon-nudge-right {
-            @apply motion-safe:translate-x-0.75;
-        }
-
-        .split-button:hover .split-icon-nudge-up-right {
-            @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
-        }
-
-    }
-
-    /* ===== Split section ===== */
-
-    @layer components {
-
-        .split {
-            @apply w-full px-6 py-16 md:px-12 md:py-24;
-        }
-
-        /* Two columns from lg (1024px): text and image side by side,
-        vertically centred. Below lg they stack, image first. */
-        .split-grid {
-            @apply mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16;
-        }
-
-        /* Text column. In the HTML the text comes first (logical reading
-        order); CSS order controls where the image appears. */
-        .split-text {
-            @apply w-full text-lg;
-        }
-
-        .split-media {
-            @apply order-first lg:order-none;
-        }
-
-        /* "Image on left": add split-reverse to the section */
-        .split-reverse .split-media {
-            @apply lg:order-first;
-        }
-
-        .split h2 {
-            @apply text-3xl md:text-4xl font-normal leading-tight tracking-tight;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split p {
-            @apply mt-5 leading-relaxed;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split h2 + p {
-            @apply mt-3;
-        }
-
-        /* Whatever comes first starts at the top */
-        .split-text > :first-child {
-            @apply mt-0;
-        }
-
-        /* Image: fills its column at its natural 4:3 shape */
-        .split-image {
-            @apply block h-auto w-full;
-        }
-
-        /* "Image fills column": add split-fill to the section. The image
-        runs edge to edge and is cropped to fit (object-cover); the text
-        keeps its padding. On phones the image sits on top at 4:3. */
-        .split-fill {
-            @apply p-0 md:p-0;
-        }
-
-        .split-fill .split-grid {
-            @apply max-w-none items-stretch gap-0 lg:min-h-[480px] lg:gap-0;
-        }
-
-        .split-fill .split-text {
-            @apply max-w-xl self-center justify-self-center px-6 py-16 md:px-12 md:py-20 lg:px-16;
-        }
-
-        .split-fill .split-media {
-            @apply relative aspect-[4/3] lg:aspect-auto;
-        }
-
-        .split-fill .split-image {
-            @apply absolute inset-0 h-full w-full object-cover;
-        }
-
-        /* Link: underlined in both states; its colours are classes in the HTML.
-        Thickness and offset are in em, so they scale with the text. */
-        .split-link {
-            @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
-        }
-
-        .split-link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-            border-radius: 2px;
-        }
-
-        /* Button: a link styled as a button; its shape and colours
-        are classes in the HTML. */
-        .split-buttons {
-            @apply mt-8 flex flex-wrap gap-4;
-        }
-
-        .split-button {
-            @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-7 py-3 text-base font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
-        }
-
-        /* Optional icon after the button text */
-        .split-button-icon {
-            @apply size-5 shrink-0 transition-transform duration-200;
-        }
-
-        /* Arrows nudge in their direction on hover */
-        .split-button:hover .split-icon-nudge-right {
-            @apply motion-safe:translate-x-0.75;
-        }
-
-        .split-button:hover .split-icon-nudge-up-right {
-            @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
-        }
-
-    }
-
-    /* ===== Split section ===== */
-
-    @layer components {
-
-        .split {
-            @apply w-full px-6 py-16 md:px-12 md:py-24;
-        }
-
-        /* Two columns from lg (1024px): text and image side by side,
-        vertically centred. Below lg they stack, image first. */
-        .split-grid {
-            @apply mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16;
-        }
-
-        /* Text column. In the HTML the text comes first (logical reading
-        order); CSS order controls where the image appears. */
-        .split-text {
-            @apply w-full text-lg;
-        }
-
-        .split-media {
-            @apply order-first lg:order-none;
-        }
-
-        /* "Image on left": add split-reverse to the section */
-        .split-reverse .split-media {
-            @apply lg:order-first;
-        }
-
-        .split h2 {
-            @apply text-3xl md:text-4xl font-normal leading-tight tracking-tight;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split p {
-            @apply mt-5 leading-relaxed;
-            overflow-wrap: anywhere;
-            white-space: pre-wrap;
-        }
-
-        .split h2 + p {
-            @apply mt-3;
-        }
-
-        /* Whatever comes first starts at the top */
-        .split-text > :first-child {
-            @apply mt-0;
-        }
-
-        /* Image: fills its column at its natural 4:3 shape */
-        .split-image {
-            @apply block h-auto w-full;
-        }
-
-        /* "Image fills column": add split-fill to the section. The image
-        runs edge to edge and is cropped to fit (object-cover); the text
-        keeps its padding. On phones the image sits on top at 4:3. */
-        .split-fill {
-            @apply p-0 md:p-0;
-        }
-
-        .split-fill .split-grid {
-            @apply max-w-none items-stretch gap-0 lg:min-h-[480px] lg:gap-0;
-        }
-
-        .split-fill .split-text {
-            @apply max-w-xl self-center justify-self-center px-6 py-16 md:px-12 md:py-20 lg:px-16;
-        }
-
-        .split-fill .split-media {
-            @apply relative aspect-[4/3] lg:aspect-auto;
-        }
-
-        .split-fill .split-image {
-            @apply absolute inset-0 h-full w-full object-cover;
-        }
-
-        /* Link: underlined in both states; its colours are classes in the HTML.
-        Thickness and offset are in em, so they scale with the text. */
-        .split-link {
-            @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
-        }
-
-        .split-link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-            border-radius: 2px;
-        }
-
-        /* Button: a link styled as a button; its shape and colours
-        are classes in the HTML. */
-        .split-buttons {
-            @apply mt-8 flex flex-wrap gap-4;
-        }
-
-        .split-button {
-            @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-7 py-3 text-base font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
-        }
-
-        /* Optional icon after the button text */
-        .split-button-icon {
-            @apply size-5 shrink-0 transition-transform duration-200;
-        }
-
-        /* Arrows nudge in their direction on hover */
-        .split-button:hover .split-icon-nudge-right {
-            @apply motion-safe:translate-x-0.75;
-        }
-
-        .split-button:hover .split-icon-nudge-up-right {
-            @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
-        }
-
-    }
-
-
-    
-
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Meet the Greek Gods</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: #201b35;
+  color: white;
+  font-size: 20px;
+}
+
+/* HEADER */
+
+header {
+  text-align: center;
+  padding: 130px 20px;
+  background:
+    linear-gradient(#171329aa,#171329dd),
+    url("https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=1600")
+    center/cover;
+}
+
+header h1 {
+  font-size: 62px;
+  color: #f5d995;
+  margin-bottom: 20px;
+}
+
+header p {
+  font-size: 25px;
+  color: white;
+}
+
+/* INTRODUCTION */
+
+.intro {
+  background: #f6f0e4;
+  color: #29243a;
+  text-align: center;
+  padding: 50px 15%;
+  font-size: 24px;
+  line-height: 1.7;
+}
+
+/* GOD SECTIONS */
+
+.god {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 55px;
+  padding: 75px 10%;
+}
+
+.god:nth-child(even) {
+  background: #f6f0e4;
+  color: #29243a;
+  flex-direction: row-reverse;
+}
+
+.god div {
+  flex: 1;
+}
+
+.god h2 {
+  font-size: 43px;
+  color: #e9c77b;
+  margin-bottom: 15px;
+}
+
+.god:nth-child(even) h2 {
+  color: #9b702d;
+}
+
+.god h3 {
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.god p {
+  font-size: 22px;
+  line-height: 1.8;
+}
+
+/* SMALLER IMAGES */
+
+.god img {
+  width: 38%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 15px;
+  display: block;
+}
+
+/* FOOTER */
+
+footer {
+  background: #171329;
+  text-align: center;
+  padding: 50px;
+  color: #f5d995;
+  font-size: 21px;
+}
+
+footer h2 {
+  font-size: 32px;
+}
+
+/* MOBILE VERSION */
+
+@media(max-width:700px) {
+
+  .god,
+  .god:nth-child(even) {
+    flex-direction: column;
+    padding: 40px 20px;
+    gap: 25px;
+  }
+
+  .god img {
+    width: 80%;
+    max-height: 300px;
+  }
+
+  header {
+    padding: 90px 20px;
+  }
+
+  header h1 {
+    font-size: 42px;
+  }
+
+  header p {
+    font-size: 21px;
+  }
+
+  .intro {
+    padding: 35px 20px;
+    font-size: 21px;
+  }
+
+  .god h2 {
+    font-size: 36px;
+  }
+
+  .god h3 {
+    font-size: 21px;
+  }
+
+  .god p {
+    font-size: 20px;
+  }
+
+  footer {
+    padding: 35px 20px;
+  }
+}
+
+</style>
 </head>
 
 <body>
-    <!-- Hero -->
-    <header class="hero hero-min-height">
-        <div class="hero-image" aria-hidden="true"></div>
-        <div class="hero-overlay bg-black opacity-40" aria-hidden="true"></div>
-        <div class="hero-content">
-            <h1 class="font-bold text-white tracking-[-0.050em]">Lorem ipsum dolor sit amet</h1>
-            <h2 class="text-white tracking-[-0.025em]">Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
-            <div class="hero-buttons">
-                <a href="#" class="hero-button rounded-lg bg-white text-slate-900 hover:bg-slate-200">Order now</a>
-                <a href="#" class="hero-button hero-button-secondary rounded-lg border-white text-white hover:border-slate-200 hover:text-slate-200">Learn more</a>
-            </div>
-        </div>
-    </header>
 
-    <!-- One-column section -->
-    <section class="one-col one-col-centre bg-white">
-        <div class="one-col-content">
-            <p class="text-black text-2xl">Leverage agile frameworks to provide a robust synopsis for high-level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. At the end of the day, going forward.</p>
-        </div>
-    </section>
+<!-- HEADER -->
 
-    <!-- Split section -->
-    <section class="split bg-slate-900">
-        <div class="split-grid">
+<header>
+  <h1>Meet the Greek Gods</h1>
 
-            <div class="split-text">
-                <h2 class="text-white font-bold">Nice section heading</h2>
-                <p class="text-white">Leverage agile frameworks to provide a robust synopsis for high-level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. At the end of the day, going forward, a new paradigm that has evolved from Generation X is on the runway heading towards a streamlined cloud solution. User-generated content in real-time will have multiple touchpoints.</p>
-            </div>
+  <p>
+    Discover four powerful gods from Ancient Greek mythology.
+  </p>
+</header>
 
-            <div class="split-media">
-                <img class="split-image" src="https://lunevedy.com/v2/assets/img/1200x900.jpg" alt="Placeholder image" width="1200" height="900" loading="lazy" decoding="async">
-            </div>
+<!-- INTRODUCTION -->
 
-        </div>
-    </section>
+<section class="intro">
 
-    <!-- Split section -->
-    <section class="split split-reverse bg-white">
-        <div class="split-grid">
+  <p>
+    Ancient Greeks believed in many gods and goddesses.
+    They had different powers and ruled different parts
+    of the world. Let's discover four famous Greek gods!
+  </p>
 
-            <div class="split-text">
-                <h2 class="text-black font-bold">Nice section heading</h2>
-                <p class="text-black">Leverage agile frameworks to provide a robust synopsis for high-level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. At the end of the day, going forward, a new paradigm that has evolved from Generation X is on the runway heading towards a streamlined cloud solution. User-generated content in real-time will have multiple touchpoints.</p>
-            </div>
+</section>
 
-            <div class="split-media">
-                <img class="split-image" src="https://lunevedy.com/v2/assets/img/1200x900.jpg" alt="Placeholder image" width="1200" height="900" loading="lazy" decoding="async">
-            </div>
+<!-- MAIN CONTENT -->
 
-        </div>
-    </section>
+<main>
 
-   <!-- Split section -->
-    <section class="split bg-slate-900">
-        <div class="split-grid">
+  <!-- ZEUS -->
 
-            <div class="split-text">
-                <h2 class="text-white font-bold">Nice section heading</h2>
-                <p class="text-white">Leverage agile frameworks to provide a robust synopsis for high-level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. At the end of the day, going forward, a new paradigm that has evolved from Generation X is on the runway heading towards a streamlined cloud solution. User-generated content in real-time will have multiple touchpoints.</p>
-            </div>
+  <section class="god">
 
-            <div class="split-media">
-                <img class="split-image" src="https://lunevedy.com/v2/assets/img/1200x900.jpg" alt="Placeholder image" width="1200" height="900" loading="lazy" decoding="async">
-            </div>
+    <div>
 
-        </div>
-    </section>
+      <h2>1. Zeus ⚡</h2>
 
-    <!-- Split section -->
-    <section class="split split-reverse bg-white">
-        <div class="split-grid">
+      <h3>King of the Gods</h3>
 
-            <div class="split-text">
-                <h2 class="text-black font-bold">Nice section heading</h2>
-                <p class="text-black">Leverage agile frameworks to provide a robust synopsis for high-level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. At the end of the day, going forward, a new paradigm that has evolved from Generation X is on the runway heading towards a streamlined cloud solution. User-generated content in real-time will have multiple touchpoints.</p>
-            </div>
+      <p>
+        Zeus was the ruler of Mount Olympus and the god
+        of the sky and thunder. He carried a powerful
+        thunderbolt and was considered the king of the gods.
+        His symbols included the eagle and lightning bolt.
+      </p>
 
-            <div class="split-media">
-                <img class="split-image" src="https://lunevedy.com/v2/assets/img/1200x900.jpg" alt="Placeholder image" width="1200" height="900" loading="lazy" decoding="async">
-            </div>
+    </div>
 
-        </div>
-    </section>
+    <img
+      src="https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Zeus.jpg"
+      alt="Statue representing Zeus"
+    >
+
+  </section>
 
 
+  <!-- POSEIDON -->
+
+  <section class="god">
+
+    <div>
+
+      <h2>2. Poseidon 🌊</h2>
+
+      <h3>God of the Sea</h3>
+
+      <p>
+        Poseidon was the god of the sea, earthquakes and
+        horses. He carried a three-pronged spear called
+        a trident. He could create powerful storms and
+        huge waves. His symbol was the trident.
+      </p>
+
+    </div>
+
+    <img
+      src="https://commons.wikimedia.org/wiki/Special:FilePath/Poseidon_sculpture_Copenhagen_2005.jpg"
+      alt="Statue representing Poseidon"
+    >
+
+  </section>
 
 
+  <!-- ATHENA -->
+
+  <section class="god">
+
+    <div>
+
+      <h2>3. Athena 🦉</h2>
+
+      <h3>Goddess of Wisdom</h3>
+
+      <p>
+        Athena was the goddess of wisdom, courage and
+        strategic skill. She protected the city of Athens.
+        Her famous symbol was the owl, which represents
+        wisdom and knowledge.
+      </p>
+
+    </div>
+
+    <img
+      src="https://commons.wikimedia.org/wiki/Special:FilePath/Athena_Varvakeion.jpg"
+      alt="Statue representing Athena"
+    >
+
+  </section>
 
 
+  <!-- HADES -->
 
+  <section class="god">
 
-    <main>
+    <div>
 
-        <!--
-            2. SECTIONS
-            Paste section blocks here, in the order you want them.
-            Sections use h2 headings; cards inside them use h3.
-        -->
+      <h2>4. Hades 🏛️</h2>
 
+      <h3>God of the Underworld</h3>
 
-    </main>
+      <p>
+        Hades was the ruler of the Underworld, the realm
+        of the dead in Greek mythology. He was the brother
+        of Zeus and Poseidon. He was often portrayed as
+        serious and mysterious.
+      </p>
+
+    </div>
+
+    <img
+      src="https://commons.wikimedia.org/wiki/Special:FilePath/Hades-et-Cerberus-III.jpg"
+      alt="Artwork representing Hades"
+    >
+
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer>
+
+  <h2>A World of Myths and Legends</h2>
+
+  <p>
+    Discover the fascinating world of Greek mythology!
+  </p>
+
+  <p>
+    Thank you for visiting!
+  </p>
+
+</footer>
 
 </body>
 </html>
