@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+        Save this file in your project-folder:
+
+        project-folder/
+        ├── index.html        ← this file
+        └── assets/
+            ├── img/          ← images:  src="assets/img/..."
+            └── videos/       ← videos:  src="assets/videos/..."
+
+        The sample images and videos in the generators load from lunevedy.com,
+        so they work wherever this file is saved. Paths to your own images and
+        videos start with assets/, so they only work when this file sits
+        directly inside your project-folder.
+    -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My page title</title>
+
+    <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+
+    <!-- Preload the hero image so it appears as soon as possible -->
+    <link rel="preload" as="image" href="https://lunevedy.com/v2/assets/img/hero-image.jpg">
+
+    <!-- Tailwind CSS (include once per page) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!--
+        All the page's CSS goes in this one style element.
+        Paste each block type's CSS once, even if you use that block type several times.
+    -->
+    <style type="text/tailwindcss">
+
+        /* Paste CSS styles here */
+        /* ===== Four-column section ===== */
+
+        @layer components {
+
+            .four-col {
+                @apply w-full px-6 py-16 md:px-12 md:py-24;
+            }
+
+            /* Intro: centred above the columns. Width is measured in
+            characters (60ch is about 600px at this 18px text size). */
+            .four-col-intro {
+                @apply mx-auto mb-12 max-w-[60ch] text-center text-lg md:mb-16;
+            }
+
+            .four-col-intro h2 {
+                @apply text-4xl md:text-5xl font-normal leading-tight tracking-tight;
+            }
+
+            .four-col-intro p {
+                @apply mt-3 text-xl leading-relaxed;
+            }
+
+            /* "Intro alignment: Left": add four-col-intro-left to the section.
+            The intro lines up with the left edge of the cards, and its
+            text stays a readable width. */
+            .four-col-intro-left .four-col-intro {
+                @apply max-w-[460px] text-left md:max-w-[1356px];
+            }
+
+            .four-col-small-2.four-col-intro-left .four-col-intro {
+                @apply max-w-[1356px];
+            }
+
+            .four-col-intro-left .four-col-intro > * {
+                @apply max-w-[60ch];
+            }
+
+            /* Phones: one centred column no wider than the images (460px).
+            From md (768px): two columns. From xl (1280px): four columns. */
+            .four-col-grid {
+                @apply mx-auto grid w-full max-w-[460px] grid-cols-1 gap-12 md:max-w-[1356px] md:grid-cols-2 md:gap-x-8 md:gap-y-12 xl:grid-cols-4 xl:gap-x-6;
+            }
+
+            /* Optional: two columns on phones too */
+            .four-col-small-2 .four-col-grid {
+                @apply max-w-[1356px] grid-cols-2 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12 xl:grid-cols-4 xl:gap-x-6;
+            }
+
+            .four-col-card {
+                @apply flex flex-col;
+            }
+
+            .four-col-card img {
+                @apply block h-auto w-full;
+            }
+
+            /* Fixed card text sizes, which suit the narrow columns */
+            .four-col-card h3 {
+                @apply mt-4 text-lg md:text-xl font-normal leading-snug;
+            }
+
+            .four-col-card p {
+                @apply mt-2 text-base leading-normal;
+            }
+
+            /* Column background: coloured cards with padding and rounded corners;
+            the image runs edge to edge across the top. */
+            .four-col-card-bg .four-col-card {
+                @apply overflow-hidden rounded-xl;
+            }
+
+            .four-col-card-bg .four-col-card-body {
+                @apply px-6 pb-6;
+            }
+
+            /* Card icons: shown instead of the image. Size and colour are
+            classes in the HTML. */
+            .four-col-icon {
+                @apply block shrink-0;
+            }
+
+            .four-col-card-bg .four-col-icon {
+                @apply mx-6 mt-6;
+            }
+
+            /* Card borders: add four-col-bordered to the section. The card gets
+            padding, so the image sits inside the border. Thickness, corners,
+            shadow and colours are classes on each card in the HTML. */
+            .four-col-bordered .four-col-card {
+                @apply p-3;
+            }
+
+            .four-col-bordered .four-col-card-body {
+                @apply px-0 pb-0;
+            }
+
+            .four-col-bordered .four-col-icon {
+                @apply m-0;
+            }
+
+            /* Rounded cards: slightly smaller rounded corners on the image */
+            .four-col-bordered .four-col-card.rounded-xl img,
+            .four-col-bordered .four-col-card.rounded-xl .four-col-image-link {
+                @apply rounded-lg;
+            }
+
+            /* H3 links: always underlined to show they are clickable.
+            Their colours are classes in the HTML.
+            Thickness and offset are in em, so they scale with the text. */
+            .four-col-card h3 a {
+                @apply underline decoration-[length:0.11em] underline-offset-[0.3em] transition-colors;
+            }
+
+            .four-col-card h3 a:focus-visible {
+                outline: 2px solid currentColor;
+                outline-offset: 3px;
+                border-radius: 2px;
+            }
+
+            /* Image links: on hover or keyboard focus the image zooms in
+            slightly within its frame and darkens a little. */
+            .four-col-image-link {
+                @apply block overflow-hidden;
+            }
+
+            .four-col-image-link img {
+                transition: transform 300ms ease-out, filter 300ms ease-out;
+            }
+
+            .four-col-image-link:hover img,
+            .four-col-image-link:focus-visible img {
+                transform: scale(1.05);
+                filter: brightness(0.85);
+            }
+
+            /* Focus ring drawn inside the image, so rounded cards cannot clip it */
+            .four-col-image-link:focus-visible {
+                outline: 3px solid white;
+                outline-offset: -6px;
+            }
+
+            /* Reduced motion: keep the darkening, drop the zoom */
+            @media (prefers-reduced-motion: reduce) {
+                .four-col-image-link img {
+                    transition: filter 300ms ease-out;
+                }
+
+                .four-col-image-link:hover img,
+                .four-col-image-link:focus-visible img {
+                    transform: none;
+                }
+            }
+
+            /* Card buttons: the last item in each card. The card body stretches,
+            so buttons line up along the bottom of each row of cards. */
+            .four-col-card-body {
+                @apply flex flex-1 flex-col;
+            }
+
+            .four-col-buttons {
+                @apply mt-auto flex flex-wrap gap-4 pt-6;
+            }
+
+            /* A link styled as a button; its shape and colours are classes in the HTML. */
+            .four-col-button {
+                @apply inline-flex items-center justify-center gap-2 border-2 border-transparent px-5 py-2.5 text-sm font-semibold no-underline transition-colors duration-200 focus-visible:outline-offset-4;
+            }
+
+            /* Optional icon after the button text */
+            .four-col-button-icon {
+                @apply size-4 shrink-0 transition-transform duration-200;
+            }
+
+            /* Arrows nudge in their direction on hover */
+            .four-col-button:hover .four-col-icon-nudge-right {
+                @apply motion-safe:translate-x-0.75;
+            }
+
+            .four-col-button:hover .four-col-icon-nudge-up-right {
+                @apply motion-safe:translate-x-0.5 motion-safe:-translate-y-0.5;
+            }
+
+            /* Edited text stays plain and wraps safely */
+            .four-col-intro h2,
+            .four-col-intro p,
+            .four-col-card h3,
+            .four-col-card p {
+                overflow-wrap: anywhere;
+                white-space: pre-wrap;
+            }
+
+
+            /* Badge: a short label above the H2. Its shape, weight and
+            colours are classes in the HTML. */
+            .four-col-badge {
+                @apply mb-5 inline-block px-3 py-1.5 text-sm font-normal;
+                overflow-wrap: anywhere;
+                white-space: pre-wrap;
+            }
+
+            .four-col .four-col-badge + * {
+                @apply mt-0;
+            }
+
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <!-- Navigation will go here later -->
+    </nav>
+
+    <!--
+        1. HERO
+        Paste your hero block here (it starts with <header class="hero">).
+        Use one hero per page: it contains the page's only h1.
+    -->
+
+
+    <main>
+
+        <!-- Four-column section -->
+    <section class="four-col four-col-intro-left bg-indigo-950">
+
+        <div class="four-col-intro">
+            <h2 class="text-green-400 font-bold text-5xl md:text-6xl">Store</h2>
+            <p class="text-white text-2xl">Leverage agile frameworks to provide a robust synopsis for high level overviews to foster collaborative thinking.</p>
+        </div>
+
+        <div class="four-col-grid">
+
+            <article class="four-col-card">
+                <a class="four-col-image-link" href="#">
+                    <img src="assets/img/beautiful-web-design.png" alt="Bakery shop window with loaves of bread on wooden shelves and a bicycle parked outside" width="460" height="280" loading="lazy" decoding="async"></a>
+                <div class="four-col-card-body">
+                    <h3 class="text-white font-bold">Lunevedy Cafe Bakery</h3>
+                    <p class="text-white">Our friendly baristas are waiting to pour your favourite beverage. We use only expertly selected coffee beans and tea leaves.</p>
+                    <div class="four-col-buttons">
+                        <a href="#" class="four-col-button rounded-full bg-yellow-200 text-black hover:bg-yellow-100">
+                            Learn more
+                            <svg class="four-col-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="four-col-card">
+                <a class="four-col-image-link" href="#">
+                    <img src="assets/img/responsive-web-design-frain.jpg" alt="Smiling woman in sunglasses and a denim jacket against a bright yellow wall" width="460" height="280" loading="lazy" decoding="async"></a>
+                <div class="four-col-card-body">
+                    <h3 class="text-white font-bold">Lunevedy Fashion Store</h3>
+                    <p class="text-white">Level up your look with our ever-changing selection of on-trend brands. We ship to almost everywhere in the world.</p>
+                    <div class="four-col-buttons">
+                        <a href="#" class="four-col-button rounded-full bg-yellow-200 text-black hover:bg-yellow-100">
+                            Learn more
+                            <svg class="four-col-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="four-col-card">
+                <a class="four-col-image-link" href="#">
+                    <img src="assets/img/complete-website-planning.png" alt="Person working on a laptop at a wooden desk beside a window" width="460" height="280" loading="lazy" decoding="async"></a>
+                <div class="four-col-card-body">
+                    <h3 class="text-white font-bold">Learn JavaScript today</h3>
+                    <p class="text-white">Supercharge your web design career with the Lunevedy: JavaScript for Beginners training course.</p>
+                    <div class="four-col-buttons">
+                        <a href="#" class="four-col-button rounded-full bg-yellow-200 text-black hover:bg-yellow-100">
+                            Learn more
+                            <svg class="four-col-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="four-col-card">
+                <a class="four-col-image-link" href="#">
+                    <img src="assets/img/making-your-website-work.png" alt="Blue-tiled Lisbon building with wrought-iron balconies and lit shopfronts at dusk" width="460" height="280" loading="lazy" decoding="async"></a>
+                <div class="four-col-card-body">
+                    <h3 class="text-white font-bold">Lunevedy Travel</h3>
+                    <p class="text-white">Portugal&#39;s hilly, coastal capital city. Enjoy the pastel-coloured buildings, the cobbled streets, and the custard tarts.</p>
+                    <div class="four-col-buttons">
+                        <a href="#" class="four-col-button rounded-full bg-yellow-200 text-black hover:bg-yellow-100">
+                            Learn more
+                            <svg class="four-col-button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+
+
+    </main>
+
+    <footer>
+        <!-- Footer content will go here later -->
+    </footer>
+
+</body>
+</html>
